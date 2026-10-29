@@ -29,9 +29,14 @@ dev = [
     "pytest-cov>=4.0.0",
     "responses>=0.23.0",
 ]
+sim = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+]
 
 [project.scripts]
 hva = "hypervisor_adapter.cli:main"
+hva-sim = "hypervisor_adapter.simulator:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -185,6 +185,35 @@ hva get --type proxmox 100
 
 ---
 
+## Local Testing & Simulator (Zero Lab Required)
+
+Don't have access to a live Proxmox cluster or vCenter yet? The package includes a **full hypervisor mock server** that implements both the Proxmox 8.x and vCenter 7/8 REST endpoints in-memory:
+
+```bash
+# Start the local hypervisor simulator on port 8006
+hva-sim --port 8006
+```
+
+In another terminal, test both hypervisors right on your local machine:
+
+```bash
+# Test local Proxmox
+hva list --type proxmox --endpoint http://127.0.0.1:8006
+
+# Start / stop a VM on simulated Proxmox
+hva stop --type proxmox --endpoint http://127.0.0.1:8006 100
+hva start --type proxmox --endpoint http://127.0.0.1:8006 100
+
+# Resize CPU/RAM
+hva resize --type proxmox --endpoint http://127.0.0.1:8006 100 --cpu 8 --ram 16384
+
+# Test local VMware vCenter
+hva list --type vmware --endpoint http://127.0.0.1:8006 --username admin --password pass
+hva start --type vmware --endpoint http://127.0.0.1:8006 --username admin --password pass vm-1002
+```
+
+---
+
 ## Running Tests
 
 ```bash
