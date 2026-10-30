@@ -28,6 +28,7 @@ dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "responses>=0.23.0",
+    "httpx>=0.24.0",
 ]
 sim = [
     "fastapi>=0.100.0",
@@ -37,6 +38,7 @@ sim = [
 [project.scripts]
 hva = "hypervisor_adapter.cli:main"
 hva-sim = "hypervisor_adapter.simulator:main"
+hva-dashboard = "hypervisor_adapter.dashboard:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

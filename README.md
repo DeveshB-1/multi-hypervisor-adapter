@@ -185,6 +185,23 @@ hva get --type proxmox 100
 
 ---
 
+## Web Dashboard (UI) — Zero-Config Local Console
+
+The project comes with a built-in single-page web console (`hva-dashboard`) featuring a dark-mode Tailwind CSS interface.
+
+```bash
+# Launch the dashboard (auto-starts simulator + wires KVM & VMware clusters)
+uv run --with fastapi --with uvicorn hva-dashboard --port 8000
+```
+
+Open **`http://127.0.0.1:8000`** in your browser to:
+* View aggregated virtual machines across both **Proxmox KVM** and **vSphere 8**.
+* Toggle **Start / Stop** states with live visual feedback.
+* Perform **Live Hotplug Resizing** (adjust vCPUs from 1 to 32 and RAM from 1GB to 64GB).
+* Launch new workloads with the **Deploy VM** dialog.
+
+---
+
 ## Local Testing & Simulator (Zero Lab Required)
 
 Don't have access to a live Proxmox cluster or vCenter yet? The package includes a **full hypervisor mock server** that implements both the Proxmox 8.x and vCenter 7/8 REST endpoints in-memory:
