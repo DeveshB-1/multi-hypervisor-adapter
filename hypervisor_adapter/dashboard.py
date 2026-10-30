@@ -26,7 +26,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swaraj Compute — Multi-Hypervisor Console</title>
+  <title>Multi-Hypervisor Console</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -55,8 +55,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
       <div>
         <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-          Swaraj Compute
-          <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">Multi-Hypervisor</span>
+          Hypervisor Controller
+          <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">Unified CMP</span>
         </h1>
         <p class="text-xs text-slate-400">Proxmox KVM & VMware vSphere Unified Controller</p>
       </div>
@@ -174,7 +174,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <h3 class="text-lg font-bold text-white flex items-center gap-2">
         <span>🚀</span> Deploy Virtual Machine
       </h3>
-      <p class="text-xs text-slate-400">Clone and customize a new sovereign instance from gold templates.</p>
+      <p class="text-xs text-slate-400">Clone and customize a new instance from templates.</p>
 
       <div class="space-y-3 pt-2">
         <div>
@@ -350,7 +350,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 def create_dashboard_app(client: MultiHypervisorClient) -> FastAPI:
-    app = FastAPI(title="Swaraj Compute Multi-Hypervisor Dashboard")
+    app = FastAPI(title="Multi-Hypervisor Dashboard")
 
     @app.get("/", response_class=HTMLResponse)
     @app.head("/", response_class=HTMLResponse)
@@ -431,7 +431,7 @@ def main():
     )
 
     print(f"\n" + "=" * 65)
-    print(f"🚀 Swaraj Compute Multi-Hypervisor Dashboard is LIVE!")
+    print(f"🚀 Multi-Hypervisor Dashboard is LIVE!")
     print(f"👉 Open in your browser: http://{args.host}:{args.port}")
     print(f"=" * 65 + "\n")
 

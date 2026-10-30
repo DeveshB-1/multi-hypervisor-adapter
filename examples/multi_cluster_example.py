@@ -18,7 +18,7 @@ def main():
     # 1. Register a Proxmox cluster (using API Token)
     proxmox_cluster = ProxmoxAdapter(
         endpoint="https://pve1.internal.datacenter:8006",
-        token_id="root@pam!swaraj_token",
+        token_id="root@pam!api_token",
         token_secret="11111111-2222-3333-4444-555555555555",
         verify_ssl=False,
     )

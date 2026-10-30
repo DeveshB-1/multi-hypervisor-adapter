@@ -41,7 +41,7 @@ def test_client():
 def test_dashboard_html_render(test_client):
     res = test_client.get("/")
     assert res.status_code == 200
-    assert "Swaraj Compute" in res.text
+    assert "Hypervisor Controller" in res.text
     assert "Multi-Hypervisor" in res.text
 
 

@@ -6,7 +6,7 @@
 
 A unified, lightweight compute adapter for orchestrating virtual machines across **Proxmox VE (KVM)** and **VMware vCenter (vSphere)** using their native REST APIs.
 
-Designed for sovereign enterprise cloud architectures, multi-cloud platforms, and hybrid infrastructure management.
+Designed for multi-cloud platforms, hybrid infrastructure, and unified compute management.
 
 ---
 
@@ -98,7 +98,7 @@ client.register(
     "kvm-zone-a",
     ProxmoxAdapter(
         endpoint="https://pve-cluster.internal:8006",
-        token_id="root@pam!swaraj_token",
+        token_id="root@pam!api_token",
         token_secret="11111111-2222-3333-4444-555555555555",
         verify_ssl=False,
     ),
@@ -147,7 +147,7 @@ req = VMCreateRequest(
     cpu_cores=4,
     memory_mb=8192,
     cloud_init_user="ubuntu",
-    cloud_init_ssh_key="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG... user@swaraj",
+    cloud_init_ssh_key="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG... user@example",
     ip_cidr="10.10.1.50/24",
     gateway="10.10.1.1",
     storage_pool="local-lvm",

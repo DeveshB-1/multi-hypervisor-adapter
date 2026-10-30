@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Devesh B", email = "devesh.b@esds.co.in"}
+    {name = "Devesh B"}
 ]
 keywords = ["hypervisor", "proxmox", "kvm", "vmware", "vsphere", "vcenter", "iaas", "cloud"]
 classifiers = [
