@@ -353,6 +353,7 @@ def create_dashboard_app(client: MultiHypervisorClient) -> FastAPI:
     app = FastAPI(title="Swaraj Compute Multi-Hypervisor Dashboard")
 
     @app.get("/", response_class=HTMLResponse)
+    @app.head("/", response_class=HTMLResponse)
     def index():
         return HTMLResponse(content=HTML_TEMPLATE)
 
