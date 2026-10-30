@@ -5,7 +5,7 @@ import json
 import os
 import sys
 
-from hypervisor_adapter import ProxmoxAdapter, VMwareAdapter, VMResizeRequest
+from hypervisor_adapter import LibvirtKvmAdapter, ProxmoxAdapter, VMwareAdapter, VMResizeRequest
 
 
 def main() -> None:
@@ -15,8 +15,8 @@ def main() -> None:
     # Global options on subparsers
     for sub in ["list", "get", "start", "stop", "resize", "delete"]:
         p = subparsers.add_parser(sub, help=f"{sub} operation")
-        p.add_argument("--type", choices=["proxmox", "vmware"], required=True, help="Hypervisor type")
-        p.add_argument("--endpoint", default=os.getenv("HYPERVISOR_ENDPOINT"), help="API Endpoint URL")
+        p.add_argument("--type", choices=["proxmox", "vmware", "kvm"], required=True, help="Hypervisor type")
+        p.add_argument("--endpoint", default=os.getenv("HYPERVISOR_ENDPOINT"), help="API Endpoint URL or libvirt URI")
         p.add_argument("--username", default=os.getenv("HYPERVISOR_USER"), help="Username / Token ID")
         p.add_argument("--password", default=os.getenv("HYPERVISOR_PASSWORD"), help="Password / Token Secret")
         p.add_argument("--token-id", default=os.getenv("PROXMOX_TOKEN_ID"), help="Proxmox Token ID (USER@REALM!TOKEN)")
@@ -33,12 +33,14 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    if not args.endpoint:
-        print("Error: --endpoint or HYPERVISOR_ENDPOINT is required", file=sys.stderr)
-        sys.exit(1)
-
     # Instantiate adapter
-    if args.type == "proxmox":
+    if args.type == "kvm":
+        uri = args.endpoint or "qemu:///session"
+        adapter = LibvirtKvmAdapter(uri=uri)
+    elif args.type == "proxmox":
+        if not args.endpoint:
+            print("Error: --endpoint or HYPERVISOR_ENDPOINT is required", file=sys.stderr)
+            sys.exit(1)
         adapter = ProxmoxAdapter(
             endpoint=args.endpoint,
             token_id=args.token_id,
@@ -48,6 +50,9 @@ def main() -> None:
             verify_ssl=not args.insecure,
         )
     else:
+        if not args.endpoint:
+            print("Error: --endpoint or HYPERVISOR_ENDPOINT is required", file=sys.stderr)
+            sys.exit(1)
         if not args.username or not args.password:
             print("Error: --username and --password are required for VMware vCenter", file=sys.stderr)
             sys.exit(1)

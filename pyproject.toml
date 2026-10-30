@@ -34,6 +34,9 @@ sim = [
     "fastapi>=0.100.0",
     "uvicorn>=0.20.0",
 ]
+kvm = [
+    "libvirt-python>=9.0.0",
+]
 
 [project.scripts]
 hva = "hypervisor_adapter.cli:main"

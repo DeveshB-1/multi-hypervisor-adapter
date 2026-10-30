@@ -22,12 +22,14 @@ from hypervisor_adapter.models import (
 )
 from hypervisor_adapter.proxmox import ProxmoxAdapter
 from hypervisor_adapter.vmware import VMwareAdapter
+from hypervisor_adapter.libvirt_kvm import LibvirtKvmAdapter
 
 __version__ = "0.1.0"
 __all__ = [
     "BaseComputeAdapter",
     "ProxmoxAdapter",
     "VMwareAdapter",
+    "LibvirtKvmAdapter",
     "MultiHypervisorClient",
     "HypervisorType",
     "PowerState",

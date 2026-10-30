@@ -8,6 +8,8 @@ from pydantic import BaseModel, Field
 class HypervisorType(str, Enum):
     PROXMOX = "proxmox"
     VMWARE = "vmware"
+    KVM = "kvm"
+    LIBVIRT = "libvirt"
 
 
 class PowerState(str, Enum):

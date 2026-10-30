@@ -47,13 +47,17 @@ flowchart TD
 ## Features
 
 * **Unified Abstraction Layer:** Single interface (`list_vms`, `get_vm`, `start_vm`, `stop_vm`, `restart_vm`, `create_vm`, `resize_vm`, `delete_vm`).
-* **Proxmox VE (KVM) Integration:**
+* **Native Bare-Metal KVM Integration (`LibvirtKvmAdapter`):**
+  * Drives `/dev/kvm` directly using hardware virtualization on Linux (`qemu:///session` or `qemu:///system`).
+  * Instantaneous Copy-on-Write (COW) disk provisioning from gold base images.
+  * Real hardware CPU & RAM allocation with live virsh/libvirt management.
+* **Proxmox VE (KVM) Integration (`ProxmoxAdapter`):**
   * Uses the Proxmox 8.x JSON REST API (`https://<host>:8006/api2/json`).
   * Supports non-expiring **API Token Authentication** (`PVEAPIToken=USER@REALM!TOKENID=UUID`) and ticket auth.
   * Native **Cloud-Init** injection (SSH public keys, default user, static IP/CIDR, gateway).
   * Fast template cloning (full or linked clones) and disk/storage pool selection.
   * Live hardware hotplug / resizing (`cores`, `memory`).
-* **VMware vCenter (vSphere) Integration:**
+* **VMware vCenter (vSphere) Integration (`VMwareAdapter`):**
   * Native vSphere 7.0 / 8.0 REST API (`https://<vcenter-host>/api`).
   * Automatic **Session Token** management with transparent re-login on token expiration.
   * Direct hardware patching (`/hardware/cpu`, `/hardware/memory`).

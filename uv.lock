@@ -579,6 +579,12 @@ wheels = [
 ]
 
 [[package]]
+name = "libvirt-python"
+version = "12.8.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/9e/7211301d1d53acfaa5f99bec4af279e575c31e0aca7e2fe84a5aaa73d8f9/libvirt_python-12.8.0.tar.gz", hash = "sha256:ab24a102ebf99b913ddc3459031aa71a48b0b1cdbb0f423b4ea278052791ac8a", size = 256610, upload-time = "2026-10-01T09:08:40.762Z" }
+
+[[package]]
 name = "multi-hypervisor-adapter"
 version = "0.1.0"
 source = { editable = "." }
@@ -594,6 +600,9 @@ dev = [
     { name = "pytest-cov" },
     { name = "responses" },
 ]
+kvm = [
+    { name = "libvirt-python" },
+]
 sim = [
     { name = "fastapi" },
     { name = "uvicorn" },
@@ -603,6 +612,7 @@ sim = [
 requires-dist = [
     { name = "fastapi", marker = "extra == 'sim'", specifier = ">=0.100.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.24.0" },
+    { name = "libvirt-python", marker = "extra == 'kvm'", specifier = ">=9.0.0" },
     { name = "pydantic", specifier = ">=2.0.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.0.0" },
@@ -610,7 +620,7 @@ requires-dist = [
     { name = "responses", marker = "extra == 'dev'", specifier = ">=0.23.0" },
     { name = "uvicorn", marker = "extra == 'sim'", specifier = ">=0.20.0" },
 ]
-provides-extras = ["dev", "sim"]
+provides-extras = ["dev", "sim", "kvm"]
 
 [[package]]
 name = "opentelemetry-api"

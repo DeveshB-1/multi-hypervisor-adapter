@@ -11,6 +11,7 @@ import uvicorn
 
 from hypervisor_adapter import (
     HypervisorType,
+    LibvirtKvmAdapter,
     MultiHypervisorClient,
     PowerState,
     ProxmoxAdapter,
@@ -180,19 +181,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div>
           <label class="text-xs font-semibold text-slate-300 block mb-1">Target Cluster</label>
           <select id="deploy-cluster" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
-            <option value="proxmox-zone-a">proxmox-zone-a (KVM)</option>
-            <option value="vmware-zone-b">vmware-zone-b (vSphere)</option>
+            <option value="local-kvm-hardware">⚡ local-kvm-hardware (Real /dev/kvm on this machine)</option>
+            <option value="proxmox-zone-a">proxmox-zone-a (Simulated KVM)</option>
+            <option value="vmware-zone-b">vmware-zone-b (Simulated vSphere)</option>
           </select>
         </div>
         <div>
           <label class="text-xs font-semibold text-slate-300 block mb-1">VM Name</label>
-          <input type="text" id="deploy-name" placeholder="app-web-01" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+          <input type="text" id="deploy-name" placeholder="real-local-vm-01" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
         </div>
         <div>
-          <label class="text-xs font-semibold text-slate-300 block mb-1">Gold Template</label>
+          <label class="text-xs font-semibold text-slate-300 block mb-1">Template / Disk</label>
           <select id="deploy-template" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
-            <option value="9000">Ubuntu 24.04 LTS (Cloud-Init Ready)</option>
-            <option value="9001">Rocky Linux 9 (Enterprise Baseline)</option>
+            <option value="/home/devesh/gpos_koji/eel9-guest.qcow2">Enterprise Linux 9 (Local qcow2 Fast-COW)</option>
+            <option value="blank">Blank QEMU Drive (10 GB)</option>
+            <option value="9000">Cloud-Init Gold Template (9000)</option>
           </select>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -248,7 +251,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         const hypBadge = vm.hypervisor === 'proxmox'
           ? '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">Proxmox KVM</span>'
-          : '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">vSphere 8</span>';
+          : (vm.hypervisor === 'vmware'
+            ? '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">vSphere 8</span>'
+            : '<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Bare-Metal KVM</span>');
 
         const statusBadge = isRunning
           ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 status-running"></span>Running</span>'
@@ -411,6 +416,16 @@ def main():
 
     # 2. Wire up MultiHypervisorClient
     client = MultiHypervisorClient()
+
+    # Try registering real local KVM hardware if available
+    try:
+        kvm_adapter = LibvirtKvmAdapter(uri="qemu:///session")
+        if kvm_adapter.ping():
+            client.register("local-kvm-hardware", kvm_adapter)
+            print("  ✓ Real Bare-Metal KVM registered via libvirt (qemu:///session)")
+    except Exception as e:
+        print(f"  (Real local KVM not active: {e})")
+
     client.register(
         "proxmox-zone-a",
         ProxmoxAdapter(
